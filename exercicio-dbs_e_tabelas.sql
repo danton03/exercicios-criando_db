@@ -40,9 +40,30 @@ CREATE TABLE "customerAddresses"(
 CREATE TABLE "bankAccount"(
 	"id" serial NOT NULL PRIMARY KEY,
 	"customerId" integer NOT NULL REFERENCES customers(id),
-	"accountNumber" integer NOT NULL,
-	"agency" integer NOT NULL,
+	"accountNumber" text NOT NULL UNIQUE,
+	"agency" text NOT NULL,
 	"openDate" DATE NOT NULL DEFAULT NOW(),
 	"closeDate" DATE
 );
 
+CREATE TABLE "transactions"(
+	"id" serial NOT NULL PRIMARY KEY,
+	"bankAccountId" integer NOT NULL REFERENCES "bankAccount"(id),
+	"amount" integer NOT NULL,
+	"type" text NOT NULL,
+	"time" timestamp NOT NULL DEFAULT NOW(),
+	"description" text,
+	"cancelled" bool
+);
+
+CREATE TABLE "creditCards"(
+	"id" serial NOT NULL PRIMARY KEY,
+	"bankAccountId" integer NOT NULL REFERENCES "bankAccount"(id),
+	"name" text NOT NULL,
+	"number" integer NOT NULL,
+	"securityCode" varchar(3) NOT NULL,
+	"expirationMonth" varchar(2) NOT NULL,
+	"expirationYear" varchar(4) NOT NULL,
+	"password" text NOT NULL,
+	"limit" integer NOT NULL
+);
